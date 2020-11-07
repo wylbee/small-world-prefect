@@ -7,6 +7,12 @@ from prefect.client import Secret
 from sqlalchemy import create_engine
 from google.cloud import storage
 
+db_port = Secret("db_port")
+db_user = Secret("db_user")
+db_pass = Secret("db_pass")
+db_host = Secret("db_host")
+db_db = Secret("db_db")
+
 storage_client = storage.Client()
 
 @task
@@ -45,4 +51,5 @@ with Flow("ETL") as flow:
     t = transform(e)
     l = load(t, extract_name)
 
-flow.run()
+flow.register(project_name="Quantified Self")
+flow.run_agent()
