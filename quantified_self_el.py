@@ -5,10 +5,13 @@ import prefect
 from prefect import Flow, task
 from prefect.client import Secret
 from sqlalchemy import create_engine
+from google.cloud import storage
+
+storage_client = storage.Client()
 
 @task
 def extract(extract_name):
-    extract_path = f'{extract_name}.csv'
+    extract_path = f'gs://small-world-analytics-filestore/quantified-self/{extract_name}.csv'
     df = pd.read_csv(extract_path)
     return df
 
