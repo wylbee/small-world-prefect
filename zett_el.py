@@ -15,7 +15,6 @@ db_user = Secret("db_user")
 db_pass = Secret("db_pass")
 db_host = Secret("db_host")
 db_db = Secret("db_db")
-storage_client = storage.Client()
 
 
 @task
@@ -27,7 +26,8 @@ def extract_zett_data_from_directory(bucket="qs-zettelkasten", directory="atoms/
     atom_ids = []
     titles = []
     statuses = []
-
+    
+    storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket)
     file_list = bucket.list_blobs(prefix=directory)
 
@@ -48,6 +48,7 @@ def extract_zett_data_from_directory(bucket="qs-zettelkasten", directory="atoms/
     results_dict = {"atom_id": atom_ids, "title": titles, "status": statuses}
 
     df = pd.DataFrame.from_dict(results_dict)
+    df = df.set_index('atom_id')
 
     return df
 
