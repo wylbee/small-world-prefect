@@ -21,7 +21,6 @@ def generate_df_from_goodreads_soup():
     html = urlopen(page)
     soup = BeautifulSoup(html, "lxml")
     filtered_soup = soup.find_all("description")
-
     title_data = []
     detail_data = []
     # first row blank, 100 item feed
