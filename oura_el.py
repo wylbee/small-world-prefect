@@ -1,17 +1,20 @@
 import pandas as pd
+import psycopg2
 
+from prefect import Flow, task
 from oura import OuraClient
 from oura.client_pandas import OuraClientDataFrame
+
 
 oura = OuraClientDataFrame(personal_access_token='')
 df = oura.combined_df_edited()
 df_unpivoted = (
     df.reset_index()
         .melt(id_vars=['summary_date'], var_name=['header'])
-        .assign(category = lambda x: (x['header'].str.split(':')))
-        #.assign(category=['header'].split(':')[0])
-        #.assign(metric_name=['header'].split(':')[1])
+        .assign(split = lambda x: (x['header'].str.split(':')))
+        .assign(category = (lambda x: x['split'].str[0]))
+        .assign(metric_name = lambda x: x['split'].str[1])
+        .drop(columns = ['header', 'split'])
 )
-#df_unpivoted = pd.melt(df, id_vars=['summary_date'], var_name=['header'])
-print(df.head())
-print(df_unpivoted.head())
+
+
