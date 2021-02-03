@@ -31,6 +31,7 @@ def generate_df_from_oura_api():
         .assign(category=(lambda x: x["split"].str[0]))
         .assign(metric_name=lambda x: x["split"].str[1])
         .drop(columns=["header", "split"])
+        .set_index(['summary_date', 'category', 'metric_name'])
     )
     return df_unpivoted
 
@@ -57,8 +58,8 @@ def upsert_df_to_postgres(df, table_name="oura_api"):
 
 
 with Flow("oura-el") as flow:
-    generate_df = generate_df_from_oura_api()
-    upsert = upsert_df_to_postgres(df=generate_df)
+    df = generate_df_from_oura_api()
+    upsert = upsert_df_to_postgres(df=df)
 
 flow.register(project_name="Quantified Self")
-flow.run_agent()
+#flow.run_agent()
