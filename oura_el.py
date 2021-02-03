@@ -59,3 +59,6 @@ def upsert_df_to_postgres(df, table_name="oura_api"):
 with Flow("oura-el") as flow:
     generate_df = generate_df_from_oura_api()
     upsert = upsert_df_to_postgres(df=generate_df)
+
+flow.register(project_name="Quantified Self")
+flow.run_agent()
