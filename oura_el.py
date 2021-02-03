@@ -62,4 +62,3 @@ with Flow("oura-el") as flow:
     upsert = upsert_df_to_postgres(df=df)
 
 flow.register(project_name="Quantified Self")
-#flow.run_agent()
