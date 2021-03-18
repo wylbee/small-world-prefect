@@ -17,6 +17,7 @@ db_db = Secret("db_db")
 
 @task
 def generate_df_from_goodreads_soup():
+    """Extract a dataframe of the past 100 items in my public Goodreads RSS feed"""
     page = "https://www.goodreads.com/review/list_rss/51384411?key=WtDvvUkHkxtfdlRlZRZ5v3AFe4OOq3SGxiQ0xn4NV5oDUDvJ&shelf=%23ALL%23"
     html = urlopen(page)
     soup = BeautifulSoup(html, "lxml")
